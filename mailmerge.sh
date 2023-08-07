@@ -39,7 +39,7 @@ while IFS='|' read -r -a values; do
 
     # Replace variables in the output file with corresponding values from data
     for ((i = 0; i < ${#variables[@]}; i++)); do
-        sed -i "s|%${variables[i]}%|${values[i]}|g" "$output_file"
+        sed -i "s|%${variables[i]}%|$(sed 's/[&/\]/\\&/g' <<< "${values[i]}")|g" "$output_file"
     done
 
     echo "Generated $output_file"
